@@ -428,3 +428,12 @@ for (let n = 1; n <= 9; n++) {
 // 初期化
 // ======================
 buildBoard();
+
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
