@@ -117,6 +117,7 @@ function render() {
 
             // 同じ数字ハイライト
             if (selected !== -1 && board[selected].num === data.num) {
+                c.classList.add("same-num");
                 div.style.color = "#0067c5";
             }
 
@@ -340,6 +341,10 @@ tabPlay.addEventListener("click", () => {
     tabPlay.classList.add("active");
     tabEdit.classList.remove("active");
 
+    //履歴リセット
+    history = [];
+    future = [];
+    
     playUI.classList.remove("hidden");
     editUI.classList.add("hidden");
 
@@ -397,6 +402,11 @@ fixBtn.addEventListener("click", () => {
             board[i].fixed = true;
         }
     }
+
+    // ★固定後に履歴完全リセット
+    history = [];
+    future = [];
+    
     render();
 });
 
