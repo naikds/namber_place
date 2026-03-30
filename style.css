@@ -68,7 +68,12 @@ h1 {
 }
 
 .memo.hl {
-    color: #0067c5;
+    color: #ff5722;   /* よく目立つ色 */
+    font-weight: bold;
+}
+
+.same-num {
+    background: #fff2a8 !important; /* 薄い黄色 */
 }
 
 /* UIエリア */
