@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ナンプレアプリ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+    <h1>ナンプレアプリ</h1>
+
+    <!-- タブ（プレイ / 問題作成） -->
+    <div id="tabs">
+        <button id="tab-play" class="active">プレイ</button>
+        <button id="tab-edit">問題作成</button>
+    </div>
+
+    <!-- 盤面 -->
+    <div id="board"></div>
+
+    <!-- ▼ プレイモード UI ▼ -->
+    <div id="play-ui" class="mode-area">
+
+        <button id="memo-toggle" class="wide-btn">MEMO OFF</button>
+
+        <div id="number-buttons-play" class="number-row"></div>
+
+        <div class="control-row">
+            <button id="undo-btn">戻る</button>
+            <button id="redo-btn">やり直し</button>
+            <button id="clear-btn">消去</button>
+        </div>
+
+        <button id="save-state">盤面（メモ含む）を保存</button>
+        <button id="load-state">盤面を読込</button>
+
+        <textarea id="import-area" placeholder="Base64 を貼り付け"></textarea>
+
+    </div>
+
+    <!-- ▼ 問題作成モード UI ▼ -->
+    <div id="edit-ui" class="mode-area hidden">
+
+        <div id="number-buttons-edit" class="number-row"></div>
+
+        <button id="edit-clear-btn">消去</button>
+        <button id="fix-btn">固定として確定する</button>
+
+        <button id="save-problem">問題を保存（固定数字のみ）</button>
+
+        <textarea id="problem-output" placeholder="Base64 出力欄"></textarea>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
