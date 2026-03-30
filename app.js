@@ -24,6 +24,11 @@ const fixBtn = document.getElementById("fix-btn");
 const saveProblemBtn = document.getElementById("save-problem");
 const problemOutput = document.getElementById("problem-output");
 
+const historyToggle = document.getElementById("history-toggle");
+const historyPanel = document.getElementById("history-panel");
+const historyClose = document.getElementById("history-close");
+const historyList = document.getElementById("history-list");
+const deleteAllSnapshotsBtn = document.getElementById("delete-all-snapshots");
 
 // ======================
 // 内部データ構造
@@ -47,6 +52,9 @@ let memoMode = false;
 // Undo/Redo用履歴
 let history = [];
 let future = [];
+
+//盤面履歴
+let snapshots = [];
 
 // ======================
 // 初期表示：盤面生成
@@ -374,8 +382,17 @@ redoBtn.addEventListener("click", redo);
 clearBtn.addEventListener("click", () => clearCell("play"));
 
 saveStateBtn.addEventListener("click", () => {
-    const text = saveToBase64(true);
-    importArea.value = text;
+    const data = saveToBase64(true);
+    importArea.value = data;
+
+    // ▼ 履歴追加
+    snapshots.unshift({
+        id: snapshots.length + 1,
+        time: new Date(),
+        data: data
+    });
+
+    updateSnapshotPanel();
 });
 
 loadStateBtn.addEventListener("click", () => {
@@ -437,3 +454,66 @@ document.addEventListener('touchend', function (event) {
     }
     lastTouchEnd = now;
 }, false);
+
+
+function openHistoryPanel() {
+    historyPanel.classList.add("open");
+}
+
+function closeHistoryPanel() {
+    historyPanel.classList.remove("open");
+}
+
+
+historyToggle.addEventListener("click", openHistoryPanel);
+historyClose.addEventListener("click", closeHistoryPanel);
+
+function deleteSnapshot(id) {
+    snapshots = snapshots.filter(s => s.id !== id);
+    updateSnapshotPanel();
+}
+
+function deleteAllSnapshots() {
+    snapshots = [];
+    updateSnapshotPanel();
+}
+
+deleteAllSnapshotsBtn.addEventListener("click", deleteAllSnapshots);
+
+function formatTime(date) {
+    const h = String(date.getHours()).padStart(2, "0");
+    const m = String(date.getMinutes()).padStart(2, "0");
+    return `${h}:${m}`;
+}
+
+function updateSnapshotPanel() {
+    historyList.innerHTML = "";
+
+    snapshots.forEach(snap => {
+        const item = document.createElement("div");
+        item.className = "snapshot-item";
+
+        const label = document.createElement("span");
+        label.textContent = `#${snap.id} ${formatTime(snap.time)}`;
+
+        // ▼ 復元
+        label.addEventListener("click", () => {
+            loadFromBase64(snap.data);
+            closeHistoryPanel();
+        });
+
+        // ▼ 個別削除
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "×";
+        delBtn.className = "snapshot-del-btn";
+        delBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            deleteSnapshot(snap.id);
+        });
+
+        item.appendChild(label);
+        item.appendChild(delBtn);
+
+        historyList.appendChild(item);
+    });
+}
