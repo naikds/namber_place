@@ -493,27 +493,27 @@ function updateSnapshotPanel() {
         const item = document.createElement("div");
         item.className = "snapshot-item";
 
-        const label = document.createElement("span");
-        label.textContent = `#${snap.id} ${formatTime(snap.time)}`;
-
-        // ▼ 復元
-        label.addEventListener("click", () => {
+        // ▼ 行全体クリックで復元
+        item.addEventListener("click", () => {
             loadFromBase64(snap.data);
             closeHistoryPanel();
         });
 
-        // ▼ 個別削除
+        // ラベル（時間など）
+        const label = document.createElement("span");
+        label.textContent = `#${snap.id} ${formatTime(snap.time)}`;
+
+        // ▼ 個別削除ボタン
         const delBtn = document.createElement("button");
         delBtn.textContent = "×";
         delBtn.className = "snapshot-del-btn";
         delBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
+            e.stopPropagation(); // 復元処理を止める
             deleteSnapshot(snap.id);
         });
 
         item.appendChild(label);
         item.appendChild(delBtn);
-
         historyList.appendChild(item);
     });
 }
